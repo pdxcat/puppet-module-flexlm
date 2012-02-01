@@ -1,0 +1,55 @@
+#! /bin/sh
+#
+# Start/Stop the flexlm license server for <%= name %>
+# /etc/init.d/flexlm-<%= name %>
+
+DAEMON="<%= binary_path %>"
+LICENSE="<%= license_path %>"
+PIDFILE="/var/run/flexlm-<%= name %>"
+DAEMON_OPTS="-z -l /var/log/flexlm/flexlm-<%= name %> -c $LICENSE -x lmdown -x lmremove"
+DESC="Flexlm license for <%= name %>"
+NAME="flexlm-<%= name %>"
+
+test -x $DAEMON || exit 1
+
+test -f /lib/lsb/init-functions || exit 1
+. /lib/lsb/init-functions
+
+case "$1" in
+  start)
+    if ! status_of_proc -p "${PIDFILE}" "${DAEMON}" "${NAME}" 2> /dev/null > /dev/null
+    then
+      log_begin_msg "Starting $DESC"
+      start-stop-daemon --start --quiet --pidfile $PIDFILE \
+        --background --make-pidfile --user daemon \
+        --chuid daemon --startas $DAEMON -- $DAEMON_OPTS
+      log_end_msg $?
+    else
+      log_failure_msg "$DESC is already running" 
+      log_end_msg 1
+    fi
+    ;;
+  stop)
+    log_begin_msg "Stopping $DESC"
+    start-stop-daemon --stop --quiet --pidfile $PIDFILE \
+      --exec $DAEMON
+    log_end_msg $?
+    ;;
+  restart)
+    log_begin_msg "Restarting $DESC"
+    start-stop-daemon --stop --quiet --pidfile $PIDFILE \
+      --exec $DAEMON
+    sleep 1
+    start-stop-daemon --start --quiet --pidfile $PIDFILE \
+      --background --make-pidfile --user daemon \
+      --startas $DAEMON -- $DAEMON_OPTS
+    log_end_msg $?
+    ;;
+  status)
+    status_of_proc -p "${PIDFILE}" "${DAEMON}" "${NAME}"
+    ;;
+  *)
+    log_success_msg "Usage: $0 {start|stop|status}"
+    exit 1
+    ;;
+esac
