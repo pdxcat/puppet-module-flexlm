@@ -7,7 +7,6 @@
 class flexlm {
   case $operatingsystem {
     "Ubuntu":  { include flexlm::ubuntu  }
-    "Solaris": { include flexlm::solaris }
   }
 
   file {

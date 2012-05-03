@@ -10,13 +10,15 @@
 #    license_path => '/pkgs/flexlm/licenses/kohles/license.dat',
 #   }
 #
-define flexlm::define::service (
+define flexlm::service (
   $binary_path = "/usr/local/bin/lmgrd",
   $license_path,
   $vendor_path = "",
   $enable = "true",
   $ensure = "running"
 ) {
+  include flexlm
+
   case $operatingsystem {
     "solaris": {
 
@@ -24,7 +26,7 @@ define flexlm::define::service (
         "svcmanifest-${name}":
           path     => "/var/svc/manifest/site/flexlm-${name}",
           ensure   => present,
-          content  => template("flexlm/${operatingsystem}/svcmanifest.erb"),
+          content  => template("flexlm/svcmanifest.erb"),
           owner    => 'root',
           group    => 'sys',
           mode     => '444',
@@ -44,13 +46,13 @@ define flexlm::define::service (
       }
 
     }
-    default: {
 
-      file { 
+    "ubuntu": {
+      file {
         "init-${name}":
           path    => "/etc/init.d/flexlm-${name}",
           ensure  => present,
-          content => template("flexlm/${operatingsystem}/initscript.erb"),
+          content => template("flexlm/initscript.erb"),
           owner   => 'root',
           group   => 'root',
           mode    => '754',
@@ -68,6 +70,10 @@ define flexlm::define::service (
             File["flexlm-logdir"],
           ];
       }
+    }
+
+    default: {
+      fail("$operatingsystem is not supported")
     }
 
   }
