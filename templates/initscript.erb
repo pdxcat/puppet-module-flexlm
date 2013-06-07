@@ -1,14 +1,14 @@
 #! /bin/sh
 #
-# Start/Stop the flexlm license server for <%= name %>
-# /etc/init.d/flexlm-<%= name %>
+# Start/Stop the flexlm license server for <%= @name %>
+# /etc/init.d/flexlm-<%= @name %>
 
-DAEMON="<%= binary_path %>"
-LICENSE="<%= license_path %>"
-PIDFILE="/var/run/flexlm-<%= name %>"
-DAEMON_OPTS="-z -l /var/log/flexlm/flexlm-<%= name %> -c $LICENSE -x lmdown -x lmremove"
-DESC="Flexlm license for <%= name %>"
-NAME="flexlm-<%= name %>"
+DAEMON="<%= @binary_path %>"
+LICENSE="<%= @license_path %>"
+PIDFILE="/var/run/flexlm-<%= @name %>"
+DAEMON_OPTS="-z -l /var/log/flexlm/flexlm-<%= @name %> -c $LICENSE -x lmdown -x lmremove"
+DESC="Flexlm license for <%= @name %>"
+NAME="flexlm-<%= @name %>"
 
 test -x $DAEMON || exit 1
 
