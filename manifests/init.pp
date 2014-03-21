@@ -9,10 +9,6 @@ class flexlm {
         ensure => symlink,
         target => '/tmp',
       }
-
-      package { 'lsb-core':
-        ensure => installed,
-      }
     }
     default: {}
   }
