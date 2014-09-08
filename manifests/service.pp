@@ -22,22 +22,22 @@ define flexlm::service (
     'SunOS': {
 
       file { "svcmanifest-${name}":
-        ensure   => present,
-        path     => "/var/svc/manifest/site/flexlm-${name}",
-        content  => template('flexlm/svcmanifest.erb'),
-        owner    => 'root',
-        group    => 'sys',
-        mode     => '0444',
-        backup   => false,
+        ensure  => present,
+        path    => "/var/svc/manifest/site/flexlm-${name}",
+        content => template('flexlm/svcmanifest.erb'),
+        owner   => 'root',
+        group   => 'sys',
+        mode    => '0444',
+        backup  => false,
       }
 
       service { "site/flexlm:${name}":
-        ensure      => $ensure,
-        enable      => $enable,
-        hasstatus   => true,
-        hasrestart  => true,
-        manifest    => "/var/svc/manifest/site/flexlm-${name}",
-        require     => [
+        ensure     => $ensure,
+        enable     => $enable,
+        hasstatus  => true,
+        hasrestart => true,
+        manifest   => "/var/svc/manifest/site/flexlm-${name}",
+        require    => [
           File["svcmanifest-${name}"],
           File['flexlm-logdir'],
         ],
