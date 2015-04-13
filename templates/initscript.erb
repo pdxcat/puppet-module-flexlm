@@ -6,7 +6,7 @@
 DAEMON="<%= @binary_path %>"
 LICENSE="<%= @license_path %>"
 PIDFILE="/var/run/flexlm-<%= @name %>"
-DAEMON_OPTS="-z -l /var/log/flexlm/flexlm-<%= @name %> -c $LICENSE -x lmdown -x lmremove"
+DAEMON_OPTS="-z -l +/var/log/flexlm/flexlm-<%= @name %> -c $LICENSE -x lmdown -x lmremove"
 DESC="Flexlm license for <%= @name %>"
 NAME="flexlm-<%= @name %>"
 
